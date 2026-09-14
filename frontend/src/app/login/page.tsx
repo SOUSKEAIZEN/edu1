@@ -6,17 +6,52 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const router = useRouter();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    // Call API placeholder
-    setTimeout(() => setLoading(false), 1000);
+    setError("");
+    
+    try {
+      // Direct absolute URL as a fallback if rewrites fail
+      const baseUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+        ? 'http://localhost:3001' 
+        : '';
+        
+      const res = await fetch(`${baseUrl}/api/auth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password })
+      });
+      
+      const text = await res.text();
+      let data;
+      try {
+        data = JSON.parse(text);
+      } catch (err) {
+        throw new Error(`Server returned non-JSON response (Status ${res.status}): ${text.substring(0, 100)}`);
+      }
+      
+      if (!res.ok) {
+        throw new Error(data.error || "Login failed");
+      }
+      
+      // Successfully logged in
+      router.push("/dashboard");
+      router.refresh();
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleGoogleLogin = () => {
@@ -51,6 +86,9 @@ export default function LoginPage() {
                 <span className="bg-surface px-2 text-muted">Or continue with</span>
               </div>
             </div>
+            
+            {error && <div className="text-sm font-medium text-red-500 text-center bg-red-500/10 py-2 rounded-md px-4 overflow-hidden text-ellipsis whitespace-nowrap" title={error}>{error}</div>}
+
             <div className="grid gap-2">
               <Label htmlFor="email">Email</Label>
               <Input id="email" type="email" placeholder="m@example.com" value={email} onChange={(e) => setEmail(e.target.value)} required />

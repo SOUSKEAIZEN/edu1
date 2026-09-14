@@ -1,10 +1,11 @@
+import 'dotenv/config';
 import { z } from 'zod';
 
 const EnvSchema = z.object({
   NODE_ENV: z.enum(['development', 'test', 'staging', 'production']).default('development'),
   PORT: z.coerce.number().default(3001),
   DATABASE_URL: z.string().min(1, "DATABASE_URL is required"),
-  OPENAI_API_KEY: z.string().optional(), // Optional for now as we mock LLM
+  OPENAI_API_KEY: z.string().optional(),
   JWT_SECRET: z.string().min(32, "JWT_SECRET must be at least 32 characters for security").default('super_secret_development_key_do_not_use_in_prod_12345'),
 });
 
