@@ -20,13 +20,11 @@ export default function LoginPage() {
     setLoading(true);
     setError("");
     
+    // Explicitly target the backend port directly
+    const targetUrl = 'http://localhost:3001/api/auth/login';
+    
     try {
-      // Direct absolute URL as a fallback if rewrites fail
-      const baseUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
-        ? 'http://localhost:3001' 
-        : '';
-        
-      const res = await fetch(`${baseUrl}/api/auth/login`, {
+      const res = await fetch(targetUrl, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password })
