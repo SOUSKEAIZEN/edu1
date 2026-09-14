@@ -1,0 +1,11 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const risk_controller_1 = require("../controllers/risk.controller");
+const auth_1 = require("../middleware/auth");
+const rbac_1 = require("../middleware/rbac");
+const router = (0, express_1.Router)();
+router.use(auth_1.authMiddleware);
+router.post('/jobs/risk', (0, rbac_1.requireRole)(['ADMIN']), risk_controller_1.RiskController.triggerBatch);
+router.get('/students/:studentId/risk', (0, rbac_1.requireRole)(['ADMIN', 'MENTOR']), risk_controller_1.RiskController.getStudentRisk);
+exports.default = router;

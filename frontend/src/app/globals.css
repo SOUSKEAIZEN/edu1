@@ -1,0 +1,56 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: #F8FAFC;
+    --surface: #FFFFFF;
+    --primary: #4F46E5;
+    --secondary: #6366F1;
+    --foreground: #0F172A;
+    --muted: #64748B;
+    --border: #E2E8F0;
+    --success: #16A34A;
+    --warning: #D97706;
+    --danger: #DC2626;
+    --info: #0284C7;
+    
+    --radius: 0.5rem;
+  }
+ 
+  .dark {
+    --background: #09090B;
+    --surface: #111113;
+    --elevated: #18181B;
+    --primary: #818CF8;
+    --secondary: #818CF8; /* Using primary as secondary for now if missing */
+    --foreground: #F4F4F5;
+    --muted: #A1A1AA;
+    --border: #27272A;
+    --success: #4ADE80;
+    --warning: #FBBF24;
+    --danger: #F87171;
+    --info: #38BDF8; /* Picked a standard dark info color */
+  }
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+  }
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

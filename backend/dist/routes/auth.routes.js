@@ -1,0 +1,14 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const auth_controller_1 = require("../controllers/auth.controller");
+const auth_1 = require("../middleware/auth");
+const router = (0, express_1.Router)();
+router.post('/register/request-otp', auth_controller_1.AuthController.requestOtp);
+router.post('/register/verify-otp', auth_controller_1.AuthController.verifyOtp);
+router.post('/register/complete', auth_controller_1.AuthController.completeRegistration);
+router.post('/login', auth_controller_1.AuthController.login);
+router.post('/google', auth_controller_1.AuthController.googleLogin);
+router.post('/logout', auth_controller_1.AuthController.logout);
+router.get('/me', auth_1.authMiddleware, auth_controller_1.AuthController.me);
+exports.default = router;
